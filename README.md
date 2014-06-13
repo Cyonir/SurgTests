@@ -10,5 +10,7 @@ This will give you a prompt -> Okay -> passes string of selected
                                       
                                       at this point hit "SPACE" while having the drop down selected
                                               ->brings up a seperate flex table embedded in a flex table
-                                              with embedded functioning Google Maps API V3
+                                              
+                                              Hitting the Plot Location button will unhide a three times embedded 
+                                              Google Maps API V3
                                       
