@@ -7,7 +7,15 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=FALSE"></script>
+     <style>
+      html { height: 100% }
+      body { height: 100%; margin: 0px; padding: 0px }
+    </style>
+        
+        
+        
     <!--                                                               -->
     <!-- Consider inlining CSS to reduce the number of requested files -->
     <!--                                                               -->
@@ -16,8 +24,8 @@
     <!--                                           -->
     <!-- Any title is fine                         -->
     <!--                                           -->
-    <title>Web Application Starter Project</title>
-    
+    <title>SurgiSearch</title>
+
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
     <!-- If you add any GWT meta tags, they must   -->
@@ -43,8 +51,12 @@
         in order for this application to display correctly.
       </div>
     </noscript>
+	<h1>Surgeries Alternate</h1>
+	<div id="gwtContainer" style="width: 100%;">
+	 </div>
 
-    <h1>Product Listing</h1>
+    <h1>Surgeries</h1>
 	<div id="root" style="width: 100%;"/>
+	
   </body>
 </html>
