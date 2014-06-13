@@ -1,0 +1,3 @@
+# Module gitlab
+# RPC service class, partial path of RPC policy file
+ca.ubc.cpsc310.gitlab.client.service.LoadUsersService, ED60FE14B9C841C9429A5F7DDA6462CA.gwt.rpc
