@@ -50,6 +50,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -80,26 +81,58 @@ public class GitLab implements EntryPoint {
 	GoogleMap map;
 	final HorizontalPanel mapLayout = new HorizontalPanel();  
 	String g;
-	
+	final TextBox text = new TextBox();
+	HorizontalPanel panelforaddress = new HorizontalPanel();
 	final Button showMap = new Button("Plot Location");
+	final TextArea addresstext = new TextArea();
+
+
+	private String Address;
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() 
-	{
+	public void onModuleLoad(){ 
+		
 		
 		final HashMap<String, List<String>> hm = new HashMap<String, List<String>>();
 		
 		
 		
+		  addresstext.setCharacterWidth(40);
+		  addresstext.setVisibleLines(5);
+		  
+		  addresstext.addKeyPressHandler(new KeyPressHandler() {
+			  	public void onKeyPress(KeyPressEvent event) {
+		    	  int keyCode = event.getUnicodeCharCode();
+					if(keyCode == KeyCodes.KEY_ENTER){
+						String f = addresstext.getText();
+						
+						boolean z = Window.confirm("Is this your entered Address? " + f);
+						if (z == true){
+						SetAddress(f);
+						}
+		        }
+		      }
+		    });
+		  
+		  addresstext.addKeyPressHandler(new KeyPressHandler() {
+			  	public void onKeyPress(KeyPressEvent event) {
+		    	  int keyCode = event.getUnicodeCharCode();
+					if(keyCode == KeyCodes.KEY_TAB){
+						Window.confirm(Address);
+		        }
+		      }
+		    });
+
+		panelforaddress.add(addresstext);
+		 
+		   
+		   
+		
 		flex.setText(0,0, "Hospital Name");
 		flex.setText(0,1,"Surgery");
-	//	flex.setWidget(2, 1, lb1);
 		flex.setStyleName("centered-table", true);
-		
-		
 		flexer.setText(0, 0, "This is a FlexTable within another FlexTable that is being added dynamically upon the entered search call.");
-	
 		flexer.setStyleName("centered-table", true);
 		
 		final ListBox lb = new ListBox();
@@ -154,11 +187,14 @@ public class GitLab implements EntryPoint {
 				public void onKeyPress(KeyPressEvent event) {
 					int keyCode = event.getUnicodeCharCode();
 					
-					if(keyCode == KeyCodes.KEY_SPACE){
+					if(keyCode == KeyCodes.KEY_BACKSPACE){
 						if (array.contains(b)){
 							for (int i=0; i < array.size(); i++){
 								if (b.equals(array.get(i))){
 									lb.setSelectedIndex(i);
+									//pass out as a method that sets a field
+									
+									
 //									int j = 0;
 //									List<String> z = hm.remove(b);
 //								while(z.size() >= j){
@@ -194,13 +230,12 @@ public class GitLab implements EntryPoint {
 			 panel.add(showMap);
 			 panel.setTitle("Hospital Selector");
 			 
-			
-			 
 			 RootPanel.get("gwtContainer").add(panel);  
 		
 		
 		
 		final LoadUsersServiceAsync service = GWT.create(LoadUsersService.class);
+		
 		service.getUsers(new AsyncCallback<List<IUser>>(){
 
 			@Override
@@ -261,33 +296,6 @@ public class GitLab implements EntryPoint {
 		    }  
 		});
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-		
 	}
 	
 	private void addlb1() {
@@ -295,32 +303,7 @@ public class GitLab implements EntryPoint {
 		flex.setWidget(2,2, flexer);
 	}
 	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * Used to display users 
 	 * @param users
@@ -332,9 +315,7 @@ public class GitLab implements EntryPoint {
 		
 		flexTable.setText(0,0, "Hospital Name");
 		
-		flexTable.setText(0,1,"Surgery");
-		//flexTable.setText(0,2, "Shopping Cart Size");
-	//	flexTable.setText(0,3, "Wish List Size");
+		flexTable.setText(0,1,"Surgery Type");
 		flexTable.setStyleName("centered-table", true);
 		
 		for(int i=0; i < users.size(); i++)
@@ -343,31 +324,27 @@ public class GitLab implements EntryPoint {
 			IUser user = users.get(i);
 			
 			flexTable.setText(i+1,0,user.getName());
-			if(user.getLanguage().trim().equals("EN"))
-			{
-				flexTable.setWidget(i+1, 1, new Image("uk.png"));
-			} else if (user.getLanguage().trim().equals("FR"))
-			{
-				flexTable.setWidget(i+1, 1, thingAdder(lb));
-			} else
-			{
-				flexTable.setText(i+1,1,user.getLanguage());
+			
+			if (user.getLanguage().trim().equals("FR")){
+				flexTable.setWidget(i+1, 1, dropDownPopulate(lb));
 			}
 			
 			flexTable.setText(i+1,2, "<-Please Select");
+			flexTable.setWidget(2, 1, panelforaddress);
+			flexTable.setText(2, 0, "Please type your address:");
 			
 		//	flexTable.setText(i+1,3,String.valueOf(user.getWishList().size()));
 		}
 	}
 	
-public ListBox thingAdder(ListBox lb){
+public ListBox dropDownPopulate(ListBox lb){
 	
 	 ArrayList<String> array = new ArrayList<String>();
-	    array.add("foo");
-	    array.add("bar");
-	    array.add("baz");
-	    array.add("toto");
-	    array.add("tintin");
+	    array.add("Surgery 1");
+	    array.add("Surgery 2");
+	    array.add("Surgery 3");
+	    array.add("Surgery 4");
+	    array.add("Surgery 5");
 	
 	   for (int i=0; i < array.size(); i++){
 		   lb.addItem(array.get(i));
@@ -375,6 +352,16 @@ public ListBox thingAdder(ListBox lb){
 	return lb;
 }
 
+private void SetAddress(String f) {
+	Address = f;
+	Window.alert("Your address is: " + getAddress());
+}
 
-	
+public String getAddress(){
+	if(Address.length() > 1){
+	return Address;
+		}
+	else return "No Address Specified.";
+	}
+
 }
